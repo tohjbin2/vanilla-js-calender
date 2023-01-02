@@ -17,6 +17,8 @@ const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const $titleSection = document.createElement('div');
 const $calendarSection = document.createElement('main');
 
+const $selected = document.createElement('div');
+
 const $tableWrap = document.createElement('div');
 const $tableSection = document.createElement('div');
 const $tableWeek = document.createElement('div');
@@ -31,23 +33,26 @@ const $tbody = document.createElement('tbody');
 const $trDate = document.createElement('tr');
 
 document.body.appendChild($titleSection).classList.add('title-section');
+document.body.appendChild($selected).classList.add('selected');
 document.body.appendChild($calendarSection).classList.add('calendar-section');
 
 $calendarSection.appendChild($tableWrap).classList.add('table-wrap');
 $tableWrap.appendChild($prevBtn).classList.add('prev-btn');
 $tableWrap.appendChild($tableSection).classList.add('table-section');
-$tableSection.appendChild($tableWeek).classList.add('table-week');
-$tableSection.appendChild($tableDate).classList.add('table-date');
+// $tableSection.appendChild($tableWeek).classList.add('table-week');
+// $tableSection.appendChild($tableDate).classList.add('table-date');
 $tableWrap.appendChild($nextBtn).classList.add('next-btn');
 
-$tableWeek.appendChild($thead);
+$tableSection.appendChild($thead);
 $thead.appendChild($trDays).classList.add('tr-days');
 
-$tableDate.appendChild($tbody);
+$tableSection.appendChild($tbody);
 $tbody.appendChild($trDate).classList.add('tr-date');
 
 $prevBtn.addEventListener('click', prevMonth);
 $nextBtn.addEventListener('click', nextMonth);
+
+$tableWrap.addEventListener('click', (e) => selectedDate(e));
 
 const date = new Date();
 
@@ -69,7 +74,7 @@ let currentYear = date.getFullYear(); // 올해
  * currentMonth에 +1하지 않은 이유는 getDay()도 인덱스 0부터 시작해서 ???
  */
 
-console.log(DAYS[currentDay]);
+console.log(DAYS[currentDay], '오늘 요일');
 
 console.log(currentDay, 'currentDay요일'); // 요일 인덱스
 console.log(currentDate, 'currentDate날짜'); // 날짜 인덱스
@@ -95,6 +100,27 @@ function calendarDay() {
   ).join('');
 }
 calendarDay();
+
+$selected.innerHTML = `
+    <div class='non-active-selected'>
+    <div>${MONTHS[date.getMonth()]}</div><div>${date.getDate()}</div>
+    </div>`;
+
+function selectedDate(e) {
+  if ((e.target.tagName = 'TD')) {
+    $selected.classList.remove('non-active-selected');
+
+    $selected.innerHTML = `
+    <div class='active-selected'>
+    <div>${MONTHS[date.getMonth()]}</div><div>${
+      e.target.innerHTML ? e.target.innerHTML : 1
+    }</div>
+    </div>`;
+
+    console.log(MONTHS[date.getMonth()]); // 월
+    console.log(e.target.innerHTML); // 날짜
+  }
+}
 
 function calendarDate() {
   date.setDate(1);
@@ -160,14 +186,24 @@ function calendarDate() {
     `<tr>${fullDates4}</tr>` +
     `<tr>${fullDates5}</tr>` +
     `<tr>${fullDates6}</tr>`;
+
+  // const $tdDate = document.querySelectorAll('.td-date');
+  // console.log($tdDate);
+  // $tdDate.addEventListener('click', (e) => {
+  //   console.log(e, 'e.current.target');
+  // });
 }
 calendarDate();
+
+function onCLick(e) {
+  console.log(e, 'e');
+}
 
 function prevMonth() {
   date.setMonth(date.getMonth() - 1);
   /**
    * date.setMonth(date.getMonth() - 1);:
-   * 해당 코드를 통해 달을 변경(현재달에 -1개월)하면서 firstDay, lastDate 변경
+   * 해당 코드를 통해 달을 변경(현재 달에 -1개월)하면서 firstDay, lastDate 변경
    */
   // firstDay = new Date(currentYear, date.getMonth() - 1, 1).getDay(); // 해당 달의 첫 번째 날의 요일
   // lastDate = new Date(currentYear, date.getMonth(), 0).getDate();
