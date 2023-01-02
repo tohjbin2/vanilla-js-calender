@@ -1,0 +1,45 @@
+/* 디폴트 코드 없음 */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+div {
+  background-color: pink;
+}
+
+th,
+td {
+  width: 50px;
+  height: 30px;
+  text-align: center;
+}
+
+.table-wrap {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  height: 300px;
+}
+
+.td-date:hover {
+  background-color: yellow;
+}
+
+.td-today {
+  background-color: tomato;
+}
+
+.prev-btn::before {
+  content: '<';
+  font-size: 50px;
+  cursor: pointer;
+}
+
+.next-btn::before {
+  content: '>';
+  font-size: 50px;
+  cursor: pointer;
+}
